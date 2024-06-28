@@ -6,9 +6,12 @@ function setup() {
     ball = new Ball(0, 0, 'white');
     paddle1 = new Paddle(-height/4, 0, 'blue');
     paddle2 = new Paddle(height/4, 0, 'yellow');
+    lvl0.loaded = 0;
 }
   
 function draw() {
+  // noLoop();
+  console.log(sigslide(-h/2, 0, 100, lvl0.loaded));
   push();
   background(0);
   translate(width/2, height/2);
@@ -24,4 +27,8 @@ function draw() {
   paddle1.epoch();
   paddle2.epoch();
   pop();
+}
+
+function slide(begin, end, framemax, frame){
+  return begin + (end-begin) * (min((frameCount-frame),framemax)/framemax);
 }
