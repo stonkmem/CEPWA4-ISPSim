@@ -1,21 +1,53 @@
 class Ball{
     constructor(x, y, col){
-        this.hb = new Sprite();
-        this.hb.position = createVector(x, y);
-        this.hb.r = 10;
-        this.hb.color = col;
+        this.s = createVector(x, y);
+        this.color = col;
         this.v = createVector(0, 0);
         this.a = createVector(0, 0);
         this.m = 1;
+        this.d = 20;
         this.q = 3;
+        this.electrified = false;
     }
     addF(funcy){
         this.a.add(funcy(this.m, this.q, this.v));
     }
     epoch(){
-        this.v.add(this.a);
-        this.hb.position.add(this.v);
-        circle(this.hb.position.x, this.hb.position.y, 20);
+        if(abs(this.s.x-paddle1.s.x)<paddle1.w/2 && abs(this.s.y-paddle1.s.y)<(this.d/2 + paddle1.h/2)){
+            this.v.y  = -this.v.y;
+            let foo = this.v.mag();
+            this.v.add(p5.Vector.mult(paddle1.v, 0.1));
+            this.v.limit(9);
+            this.s.y = paddle1.s.y-paddle1.h-1;
+        }
+        if(abs(this.s.x-paddle2.s.x)<paddle2.w/2 && abs(this.s.y-paddle2.s.y)<(this.d/2 + paddle2.h/2)){
+            this.v.y  = -this.v.y;
+            let foo = this.v.mag();
+            this.v.add(p5.Vector.mult(paddle2.v, 0.1));
+            this.v.limit(9);
+            this.s.y = paddle2.s.y+paddle2.h+1;
+            console.log(this.s.y, paddle2.s.y);
+        }
+        this.v.add(this.a).limit(9);
+        this.s.add(this.v);
+        this.s.x = max(10, this.s.x);
+        this.a = createVector(0, 0);
+        fill(this.color);
+        circle(this.s.x, this.s.y, this.d);
+        noStroke();
+    }
+    ready(param){
+        this.s.x = 87.5+15;this.s.y = 0;
+        this.v = createVector(0, 0);
+        this.a = createVector(0, 0);
+    }
+    go(){
+        this.v = createVector(0.2, -3);
+    }
+    checkOOB(){
+        if(this.s.x<0 || this.s.x>width || this.s.y>height/2 || this.s.y < -height/2){
+            return true;
+        }
     }
 }
 /*
