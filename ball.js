@@ -9,7 +9,7 @@ class Ball{
         this.q = 3;
         this.electrified = false;
     }
-    addF(funcy){
+    addF = (funcy) => {
         this.a.add(funcy(this.m, this.q, this.v));
     }
     epoch(){

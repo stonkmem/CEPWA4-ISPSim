@@ -333,5 +333,10 @@ function timeClock(kys){
     rotate((frameCount-kys)/60 * PI);
     if(frameCount-kys > 7200)lvlcnt = max(0, lvlcnt - 1);
     line(0, 0, 0, 20);
+    for(let i=1; i<10; i+=1){
+        rotate(-0.01*i);
+        stroke(0, 0, 0, 100-5*i);
+        line(0, 0, 0, 20-(i*10/50));
+    }
     pop();
 }
