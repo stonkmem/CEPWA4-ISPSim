@@ -1,10 +1,12 @@
-let lvlcnt = 3, cancerModing = false, score=-5, h, w, paddle1, paddle2, ball, lvl0 = new lvlz0(), lvl1 = new lvlo1(), lvl2 = new lvlt2(), lvl3 = new lvlt3(), border;
+let lvlcnt = 0, cancerModing = false, score=-5, h, w, paddle1, paddle2, ball, lvl0 = new lvlz0(), lvl1 = new lvlo1(), lvl2 = new lvlt2(), lvl3, lvl4, border, Timer=0, cestFinite=0;
 function setup() {
     createCanvas(windowWidth, windowHeight);console.log(width, height);
     h = height;
     w = width;
     ball = new Ball(0, 0, 'white');
     bg = color(75, 75, 75);
+    lvl3 = new lvlt3();
+    lvl4 = new lvlf4();
     // border = [new Sprite(-width/16, height/2, width/8, height, 'kinematic'), new Sprite(width + width/16, height/2, width/8, height, 'kinematic')];
     paddle1 = new Paddle(87.5, height/3+60, color(13, 38, 190));
     paddle2 = new Paddle(87.5, -height/3-60, 'yellow');
@@ -18,7 +20,10 @@ function draw() {
     fill(255);
     applyMatrix(1, 0, 0, -1, 0, height/2);
     if(lvlcnt === 3){
-
+      lvl3.rot();
+    }
+    if(lvlcnt===4){
+      lvl4.rot();
     }
     //Fade away baord fx
     rectMode(CORNERS);for(let i=0; i<5; i+=1){fill(255, 255, 255, 255-i*50);noStroke();rect(50 + i*5, height/3+50-i*3, width-50+i*5, -height/3-50-i*3, 5);}
@@ -50,12 +55,21 @@ function draw() {
       lvl2.load();
       if(ball.checkOOB()){
         lvl2.enter = true;
+        lvl2.loaded=frameCount
       }
     }
     else if(lvlcnt === 3){
       lvl3.load();
       if(ball.checkOOB()){
         lvl3.enter = true;
+        lvl3.loaded=frameCount;
+      }
+    }
+    else if(lvlcnt === 4){
+      lvl4.load();
+      if(ball.checkOOB()){
+        lvl4.enter = true;
+        lvl4.loaded=frameCount;
       }
     }
     paddle1.epoch();
@@ -64,11 +78,11 @@ function draw() {
     if(lvlcnt === 0){
       lvl0.load();
     }
-    debug();
+    // debug();
     pop();
     textAlign(RIGHT, TOP);textFont("Comic Sans", 20);
-    text(frameCount, width, 0);
-    text(lvlcnt, width, 30);
+    text(`Timer: ${frameCount-Timer/60} seconds`, width, 0);
+    text(`Level: ${lvlcnt}`, width, 30);
 }
 
 function slide(begin, end, framemax, frame){

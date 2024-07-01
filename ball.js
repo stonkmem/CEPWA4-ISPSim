@@ -45,7 +45,10 @@ class Ball{
         this.v = createVector(0.2, -3);
     }
     checkOOB(){
-        if(this.s.x<0 || this.s.x>width || this.s.y>height/2 || this.s.y < -height/2){
+        if(this.s.x<50 || this.s.x>width || this.s.y>height/2 || this.s.y < -height/2){
+            this.ready();
+            paddle1.ready();
+            paddle2.ready();
             return true;
         }
     }
