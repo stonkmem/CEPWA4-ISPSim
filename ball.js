@@ -26,7 +26,6 @@ class Ball{
             this.v.add(p5.Vector.mult(paddle2.v, 0.1));
             this.v.limit(9);
             this.s.y = paddle2.s.y+paddle2.h+1;
-            console.log(this.s.y, paddle2.s.y);
         }
         this.v.add(this.a).limit(9);
         this.s.add(this.v);
@@ -34,6 +33,9 @@ class Ball{
         this.a = createVector(0, 0);
         fill(this.color);
         circle(this.s.x, this.s.y, this.d);
+        if(lvlcnt>1){
+            circle()
+        }
         noStroke();
     }
     ready(param){

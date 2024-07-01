@@ -169,7 +169,7 @@ class lvlt3{
     constructor(){
         this.loaded = 0;
         this.enter = true;
-        this.omega = createVector(0, 0, 0.0001);
+        this.omega = createVector(0, 0, 0.0003);
         this.theta = 0;
     }
     rot(){
@@ -232,7 +232,7 @@ class lvlt3{
             push();
             fill(0, 0, 0);
             applyMatrix(1, 0, 0, -1, width/2, 0);
-            rotate(this.theta);
+            rotate(-this.theta);
             text("Spinning Board", 0, -60);
             pop();
             control();
