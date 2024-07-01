@@ -2,6 +2,7 @@ class lvlz0{
     constructor(){
         this.loaded = 0;
         this.enter=true;
+        this.pher = true;
     }
     load(){
         push();
@@ -21,7 +22,7 @@ class lvlz0{
             text("A and D for bottom paddle, ⬅️ and ➡️ arrow keys for top paddle.", 0, 12.5);
             text("Navigate the increasingly deranged physical scenarios, and get your ball to the target (🎯)", 0, 37.5);
             strokeWeight(2);stroke(255);fill(255);
-            text("---PRESS ANY KEY TO CONTINUE THROUGH THE GAME---", 0, 87.5);
+            text("Certain game mechanics may flip in time with the magenta timer displayed. (Press any key)", 0, 87.5);
             pop();
             if(frameCount-this.loaded>100 && keyIsPressed){
                 this.enter = false;
@@ -66,7 +67,8 @@ class lvlo1{
             pop();
             if(keyIsPressed === true){
                 this.enter = false;
-                this.loaded = frameCount
+                this.loaded = frameCount;
+                Timer = frameCount;
                 ball.go();
             }
         }
@@ -99,6 +101,9 @@ class lvlt2{
     load(){
         push();
         if(frameCount - this.loaded<100 && this.enter){
+            ball.ready();
+            paddle1.ready();
+            paddle2.ready();
             push();
             fill(0, 0, 0, 125);
             // translate(width/2, tanhslide(h, 0, 100, this.loaded));
@@ -164,21 +169,28 @@ class lvlt3{
     constructor(){
         this.loaded = 0;
         this.enter = true;
-        this.omega = createVector(0, 0, 0.1);
+        this.omega = createVector(0, 0, 0.0001);
         this.theta = 0;
     }
     rot(){
         push();
         translate(width/2, 0);
-        rotate(this.theta.add(this.omega.z));
+        this.theta+=this.omega.z*10;
+        rotate(this.theta);
+        for(let i=-(width+height); i<width+height; i+=30)
+            for(let j=-(width+height); j<width+height; j+=30){
+                strokeWeight(4);point(i, j);
+            }
         pop();
     }
     load(){
         push();
         if(frameCount - this.loaded<100 && this.enter){
+            ball.ready();
+            paddle1.ready();
+            paddle2.ready();
             push();
             fill(0, 0, 0, 125);
-            // translate(width/2, tanhslide(h, 0, 100, this.loaded));
             rectMode(RADIUS);
             rect(width/2, tanhslide(h, 0, 100, this.loaded), w/2, h/2);
             pop();pop();
@@ -210,7 +222,7 @@ class lvlt3{
             }
         }
         else{
-            if((frameCount - this.loaded) % 120){
+            if((frameCount - this.loaded) % 120 === 0){
                 if(random()>=0.5){
                     this.omega.mult(-1);
                 }
@@ -220,16 +232,75 @@ class lvlt3{
             push();
             fill(0, 0, 0);
             applyMatrix(1, 0, 0, -1, width/2, 0);
-            rotate((frameCount-this.loaded)/(10*TWO_PI));
+            rotate(this.theta);
             text("Spinning Board", 0, -60);
             pop();
             control();
             ball.addF((aa, Q, v)=>{return p5.Vector.cross(this.omega, ball.v).mult(50);});
+            if(p5.Vector.sub(ball.s, paddle1.s).mag()<150){
+                ball.addF((aa, Q, ...rest)=>{return p5.Vector.setMag(p5.Vector.sub(ball.s, paddle1.s), 500/p5.Vector.sub(ball.s, paddle1.s).magSq());});
+            }
+            if(p5.Vector.sub(ball.s, paddle2.s).mag()<150){
+                ball.addF((aa, Q, ...rest)=>{console.log(p5.Vector.setMag(p5.Vector.sub(ball.s, paddle2.s), 500/p5.Vector.sub(ball.s, paddle2.s).mag()).y); return p5.Vector.setMag(p5.Vector.sub(ball.s, paddle2.s), 500/p5.Vector.sub(ball.s, paddle2.s).magSq());});
+            }
             timeClock(this.loaded);
             if(ball.s.x>width-100+10 && ball.s.y<height/3+50 && ball.s.y>-(height/3 + 50)){
                 ball.v = createVector(0, 0);
-                lvlcnt = 3;
+                lvlcnt = 4;
+                lvl4.loaded = frameCount;
+                cestFinite = frameCount;
             }
+        }
+        pop();
+    }
+}
+
+class lvlf4{
+    constructor(){
+        this.loaded = 0;
+        this.enter = true;
+        this.omega = createVector(0, 0, 0.0001);
+        this.wind = createVector(0, 0);
+        this.theta = 0;
+    }
+    rot(){
+        push();
+        translate(width/2, 0);
+        push();
+        this.wind.add(p5.Vector.random2D()).limit(0.1);
+        translate(0, 200);rotate(this.wind.heading());
+        textAlign(CENTER, CENTER);
+        circle(0, 0, 100);
+        if(this.wind.mag()>0)text("💨", 0, 0);
+        pop();
+        this.theta+=this.omega.z*10;
+        rotate(this.theta);
+        for(let i=-(width+height); i<width+height; i+=30)
+            for(let j=-(width+height); j<width+height; j+=30){
+                strokeWeight(4);point(i, j);
+            }
+        pop();
+        
+    }
+    load(){
+        push();
+        console.log("LOADING");
+        let colalph = color(0, 0, 0);
+        colalph.setAlpha(225);
+        fill(colalph);
+        rectMode(RADIUS);
+        if(this.enter){
+            if(frameCount - this.loaded <100)translate(width/2, tanhslide(h, 0, 100, this.loaded));
+            else {translate(width/2, 0);}
+            rect(0, 0, w/2, h/2);
+            push();
+            scale(1, -1);
+            textAlign(CENTER, CENTER);textFont('Arial', 100);stroke(255);fill(255);
+            text("Physically Plausible Pong", 0, -87.5);
+            textAlign(CENTER, CENTER);textFont('Courier New', 25);fill(255);noStroke();
+            text(`Congrats! Your total time was: ${(cestFinite - Timer) / 60} seconds`, 0, 12.5);
+            pop();
+            if(frameCount - this.loaded > 100)noLoop();
         }
         pop();
     }

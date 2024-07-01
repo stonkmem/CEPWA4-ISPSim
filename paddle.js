@@ -19,7 +19,7 @@ class Paddle{
         this.v.y = 0;
         this.v.limit(5);
         this.s.add(this.v);
-        this.s.x = min(max(87.5, this.s.x), width-75);
+        this.s.x = min(max(this.w/2, this.s.x), width-this.w/2);
         rectMode(CENTER);
         stroke(0);strokeWeight(5);
         fill(this.color);
