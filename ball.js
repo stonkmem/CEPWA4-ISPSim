@@ -17,20 +17,37 @@ class Ball{
             this.v.y  = -this.v.y;
             let foo = this.v.mag();
             this.v.add(p5.Vector.mult(paddle1.v, 0.1));
-            
+            this.v.limit(9);
+            this.s.y = paddle1.s.y-paddle1.h-1;
         }
-        this.v.add(this.a).limit(5);
+        if(abs(this.s.x-paddle2.s.x)<paddle2.w/2 && abs(this.s.y-paddle2.s.y)<(this.d/2 + paddle2.h/2)){
+            this.v.y  = -this.v.y;
+            let foo = this.v.mag();
+            this.v.add(p5.Vector.mult(paddle2.v, 0.1));
+            this.v.limit(9);
+            this.s.y = paddle2.s.y+paddle2.h+1;
+            console.log(this.s.y, paddle2.s.y);
+        }
+        this.v.add(this.a).limit(9);
         this.s.add(this.v);
         this.s.x = max(10, this.s.x);
-        this.fill(this.color);
+        this.a = createVector(0, 0);
+        fill(this.color);
         circle(this.s.x, this.s.y, this.d);
+        noStroke();
     }
-    ready(){
-        this.s.x = 87.5;this.s.y = 0;
+    ready(param){
+        this.s.x = 87.5+15;this.s.y = 0;
         this.v = createVector(0, 0);
+        this.a = createVector(0, 0);
     }
     go(){
-        this.v = createVector(-5, 0);
+        this.v = createVector(0.2, -3);
+    }
+    checkOOB(){
+        if(this.s.x<0 || this.s.x>width || this.s.y>height/2 || this.s.y < -height/2){
+            return true;
+        }
     }
 }
 /*

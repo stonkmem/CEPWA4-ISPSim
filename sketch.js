@@ -1,4 +1,4 @@
-let lvlcnt = 1, cancerModing = false, score=-5, h, w, paddle1, paddle2, ball, lvl0 = new lvlz0(), lvl1 = new lvlo1(), border;
+let lvlcnt = 3, cancerModing = false, score=-5, h, w, paddle1, paddle2, ball, lvl0 = new lvlz0(), lvl1 = new lvlo1(), lvl2 = new lvlt2(), lvl3 = new lvlt3(), border;
 function setup() {
     createCanvas(windowWidth, windowHeight);console.log(width, height);
     h = height;
@@ -17,6 +17,9 @@ function draw() {
     background(bg);
     fill(255);
     applyMatrix(1, 0, 0, -1, 0, height/2);
+    if(lvlcnt === 3){
+
+    }
     //Fade away baord fx
     rectMode(CORNERS);for(let i=0; i<5; i+=1){fill(255, 255, 255, 255-i*50);noStroke();rect(50 + i*5, height/3+50-i*3, width-50+i*5, -height/3-50-i*3, 5);}
     //Actual board
@@ -39,9 +42,25 @@ function draw() {
     scale(1, -1);
     if(lvlcnt===1){
       lvl1.load();
+      if(ball.checkOOB()){
+        lvl1.enter = true;
+      }
+    }
+    else if(lvlcnt === 2){
+      lvl2.load();
+      if(ball.checkOOB()){
+        lvl2.enter = true;
+      }
+    }
+    else if(lvlcnt === 3){
+      lvl3.load();
+      if(ball.checkOOB()){
+        lvl3.enter = true;
+      }
     }
     paddle1.epoch();
     paddle2.epoch();
+    ball.epoch();
     if(lvlcnt === 0){
       lvl0.load();
     }

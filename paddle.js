@@ -13,7 +13,7 @@ class Paddle{
         this.a.add(funcy(this.m, this.q, this.v));
     }
     epoch(){
-        if(this.a.x === 0 && this.v.x != 0)this.a.x = Math.sign(0-this.v.x) * 0.25;
+        if(this.a.x === 0 && this.v.x != 0)this.a.x = Math.sign(0-this.v.x);
         // if(this.color != 'yellow')console.log(this.a.x);
         this.v.add(this.a);
         this.v.y = 0;
@@ -29,5 +29,10 @@ class Paddle{
         fill(0);
         pop();
         this.a = createVector(0, 0);
+    }
+    ready(){
+        this.v = createVector(0, 0);
+        this.a = createVector(0, 0);
+        this.s = createVector(87.5, this.s.y);
     }
 }
