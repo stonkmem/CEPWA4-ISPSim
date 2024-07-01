@@ -44,7 +44,7 @@ class Ball{
         this.a = createVector(0, 0);
     }
     go(){
-        this.v = createVector(0.2, -3);
+        this.v = createVector(0.3, -2.5);
     }
     checkOOB(){
         if(this.s.x<50 || this.s.x>width || this.s.y>height/2 || this.s.y < -height/2){
